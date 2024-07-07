@@ -1,6 +1,7 @@
 
 **/settings.py
 **/manage.py
+.idea/**
 
 # PRE MADE IGNORE
 # Byte-compiled / optimized / DLL files
