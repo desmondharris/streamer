@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamer</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <nav class="container-fluid">
+        <ul>
+            <li><strong>Streamer</strong></li>
+        </ul>
+        <ul>
+            <li>
+                <div id="movieTab" class="tab-content active">
+                    <input type="text" id="movieSearch" placeholder="Search for movies..." onkeypress="checkEnter(event, 'movieSearch')">
+                    <input type="text" id="movieId" placeholder="Movie ID" required />
+                    <button onclick="submitMovie()">Submit</button>
+                </div>
+            </li>
+            <li>
+                <div id="tvShowTab" class="tab-content">
+                    <input type="text" id="tvSearch" placeholder="Search for TV shows..." onkeypress="checkEnter(event, 'tvSearch')">
+                    <input type="text" id="tvId" placeholder="TV Show ID" required />
+                    <select id="season">
+                        <option value="1">Season 1</option>
+                        <option value="2">Season 2</option>
+                        <option value="3">Season 3</option>
+                        <option value="4">Season 4</option>
+                        <option value="5">Season 5</option>
+                        <option value="6">Season 6</option>
+                        <option value="7">Season 7</option>
+                        <option value="8">Season 8</option>
+                        <option value="9">Season 9</option>
+                        <option value="10">Season 10</option>
+                        <option value="11">Season 11</option>
+                        <option value="12">Season 12</option>
+                        <option value="13">Season 13</option>
+                        <option value="14">Season 14</option>
+                        <option value="15">Season 15</option>
+                        <option value="16">Season 16</option>
+                        <option value="17">Season 17</option>
+                        <option value="18">Season 18</option>
+                        <option value="19">Season 19</option>
+                        <option value="20">Season 20</option>
+                    </select>
+
+                    <button onclick="submitTVShow()">Submit</button>
+                </div>
+            </li>
+        </ul>
+        <ul>
+            <li><a href="#" onclick="showTab('movieTab')">Movie</a></li>
+            <li><a href="#" onclick="showTab('tvShowTab')">TV Show</a></li>
+        </ul>
+    </nav>
+    <div id="searchResultsWidget" class="search-results-widget">
+        <div id="searchResults"></div> <!-- Container for search results -->
+    </div>
+
+    <main class="container">
+        <div class="grid">
+            <section>
+
+                <div>
+                    <embed id="videoPlayer" src="https://vidsrc.to/embed/movie/tt1877830" type="video/mp4" allowfullscreen></embed>
+                </div>
+                <!-- Add this div for search results -->
+            </section>
+        </div>
+    </main>
+
+    <footer class="container">
+        <small><a href="#">Privacy Policy</a> • <a href="#">Terms of Service</a></small>
+    </footer>
+<script src="{% static 'util.js' %}"></script>
+</body>
+
+</html>
