@@ -36,6 +36,10 @@
         height: 600px;
     }
 
+body > main > div > section{
+    margin-bottom: 0;
+}
+
 #searchResultsWidget {
     position: fixed;
     background: #000000;

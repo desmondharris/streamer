@@ -17,14 +17,11 @@
             <li>
                 <div id="movieTab" class="tab-content active">
                     <input type="text" id="movieSearch" placeholder="Search for movies..." onkeypress="checkEnter(event, 'movieSearch')">
-                    <input type="text" id="movieId" placeholder="Movie ID" required />
-                    <button onclick="submitMovie()">Submit</button>
                 </div>
             </li>
             <li>
                 <div id="tvShowTab" class="tab-content">
                     <input type="text" id="tvSearch" placeholder="Search for TV shows..." onkeypress="checkEnter(event, 'tvSearch')">
-                    <input type="text" id="tvId" placeholder="TV Show ID" required />
                     <select id="season">
                         <option value="1">Season 1</option>
                         <option value="2">Season 2</option>
@@ -48,13 +45,13 @@
                         <option value="20">Season 20</option>
                     </select>
 
-                    <button onclick="submitTVShow()">Submit</button>
                 </div>
             </li>
         </ul>
         <ul>
             <li><a href="#" onclick="showTab('movieTab')">Movie</a></li>
             <li><a href="#" onclick="showTab('tvShowTab')">TV Show</a></li>
+            <li><a href="/profile"><button>My Profile</button></a></li>
         </ul>
     </nav>
     <div id="searchResultsWidget" class="search-results-widget">
@@ -63,14 +60,16 @@
 
     <main class="container">
         <div class="grid">
-            <section>
+            <section style="margin-bottom: 0">
 
                 <div>
                     <embed id="videoPlayer" src="https://vidsrc.to/embed/movie/tt1877830" type="video/mp4" allowfullscreen></embed>
                 </div>
                 <!-- Add this div for search results -->
             </section>
+
         </div>
+        <button id="playButton" onclick="addToList()">Add to my list</button>
     </main>
 
     <footer class="container">

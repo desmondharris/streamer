@@ -9,9 +9,6 @@ function submitTVShow() {
     const id = document.getElementById('tvId').value;
     const season = document.getElementById('season').value;
     const link = `https://vidsrc.to/embed/tv/${id}/${season}`;
-    console.log(id);
-    console.log(season);
-    console.log(link);
     updateVideo(link);
 }
 
@@ -52,7 +49,7 @@ function displayResults(results) {
     results.forEach(result => {
         const resultElement = document.createElement('div');
         resultElement.className = 'result';
-        if(result.media_type === "Movie"){
+        if(result.media_type === "movie"){
             link = `https://vidsrc.to/embed/movie/${result.id}`;
         }
         else{
@@ -86,6 +83,42 @@ function handleClickOutside(event) {
     if (!widget.contains(event.target)) {
         widget.style.display = 'none';
     }
+    console.log(event.target);
 }
+function loadAccountPage()
+{
+
+}
+function startMedia(event){
+
+    const csrftoken = '{{ csrf_token }}';
+    let player = document.getElementById("videoPlayer");
+    const url = player.src;
+    const parts = url.split('/');
+    let id, season;
+    let params = {}
+    if(player.src.includes("movie")){
+         id = parts.pop();
+
+    } else if(player.src.includes("tv")){
+         season = parts.pop();
+         id = parts.pop();
+         params.season = season;
+    }
+    params.id = id;
+    console.log(id);
+    const resp = fetch('/watch_movie/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': csrftoken  // Include CSRF token in the header
+        },
+        body: new URLSearchParams(params)
+    });
+    if(!resp.ok) {
+        console.error(`Response status ${resp.status} in  startMedia POST request`)
+    }
+}
+
 
 document.addEventListener('click', handleClickOutside);
