@@ -30,7 +30,8 @@ function checkEnter(event, searchId) {
 function search(query, searchId) {
     console.log("searching");
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `search/?q=${query}&type=${searchId}`, true);
+    xhr.open('GET', `../search/?q=${query}&type=${searchId}`, true);
+    
     console.log(xhr.responseText);
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
@@ -89,9 +90,22 @@ function loadAccountPage()
 {
 
 }
-function startMedia(event){
-
-    const csrftoken = '{{ csrf_token }}';
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+function addToList(event){
     let player = document.getElementById("videoPlayer");
     const url = player.src;
     const parts = url.split('/');
@@ -99,25 +113,47 @@ function startMedia(event){
     let params = {}
     if(player.src.includes("movie")){
          id = parts.pop();
+            params.media_type = "movie";
 
     } else if(player.src.includes("tv")){
+        console.log("tv");
          season = parts.pop();
          id = parts.pop();
          params.season = season;
+         params.media_type = "tv";
     }
     params.id = id;
     console.log(id);
-    const resp = fetch('/watch_movie/', {
+    const resp = fetch('add_to_list', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            'X-CSRFToken': csrftoken  // Include CSRF token in the header
+            'X-CSRFToken': getCookie("csrftoken") // Include CSRF token in the header
         },
         body: new URLSearchParams(params)
     });
     if(!resp.ok) {
-        console.error(`Response status ${resp.status} in  startMedia POST request`)
+        console.error(`Response status ${resp.status} in  addToList POST request`)
     }
+}
+
+function playFromList(event, media_type, id, season){
+    let link;
+    if(media_type === "movie"){
+        link = `https://vidsrc.to/embed/movie/${id}`;
+    }
+    else{
+        link = `https://vidsrc.to/embed/tv/${id}/${season}`;
+    }
+    const resp = fetch('/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': getCookie("csrftoken") // Include CSRF token in the header
+        },
+        body: new URLSearchParams({id: id, media_type: media_type, season: season})
+    });
+    updateVideo(link);
 }
 
 

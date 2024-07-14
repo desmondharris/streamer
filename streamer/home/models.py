@@ -2,38 +2,24 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class UserVideo(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    video_id = models.CharField(max_length=255)
-    is_movie = models.BooleanField(default=True)
-    season = models.IntegerField(null=True, blank=True)
-    episode = models.IntegerField(null=True, blank=True)
-
-    def __str__(self):
-        return f"{self.user.username} is watching {self.video_id}"
-
-
-class InProgressMovie(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    imdb_id = models.CharField(max_length=255)
-    current_time = models.FloatField(default=0.0)
-    def __str__(self):
-        return f"{self.user.username} is watching {self.video_id}"
-
 
 class WatchedMovie(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    imdb_id = models.CharField(max_length=255)
+    imdb_id = models.CharField(max_length=255, unique=True)
+    title = models.CharField(max_length=255)
+    year = models.IntegerField()
+    poster = models.CharField(max_length=255)
     def __str__(self):
-        return f"{self.user.username} watched {self.video_id}"
+        return f"user: {self.user.username}, title: {self.title}, year: {self.year}, poster: {self.poster}, imdb_id: {self.imdb_id}"
 
 
-class InProgressTV(models.Model):
+class WatchedTV(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    imdb_id = models.CharField(max_length=255)
-    current_time = models.FloatField(default=0.0)
+    imdb_id = models.CharField(max_length=255, unique=True)
     season = models.IntegerField()
-    episode = models.IntegerField()
+    title = models.CharField(max_length=255)
+    year = models.IntegerField()
+    poster = models.CharField(max_length=255)
     def __str__(self):
-        return f"{self.user.username} is watching {self.video_id}"
+        return f"user: {self.user.username}, title: {self.title}, year: {self.year}, poster: {self.poster}, imdb_id: {self.imdb_id}, season: {self.season}"
 # Create your models here.

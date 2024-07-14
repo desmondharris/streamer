@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Streamer</title>
     {% load static %}
@@ -67,7 +71,7 @@
                 </div>
                 {% else %}
                 <div>
-                    {% if media_type == "tv" %}
+                    {% if season != 1 %}
                         <embed id="videoPlayer" src="https://vidsrc.to/embed/{{ media_type }}/{{ imdb_id }}/{{ season }}" type="video/mp4" allowfullscreen></embed>
                     {% else %}
                         <embed id="videoPlayer" src="https://vidsrc.to/embed/{{ media_type }}/{{ imdb_id }}" type="video/mp4" allowfullscreen></embed>
@@ -88,4 +92,10 @@
 <script src="{% static 'util.js' %}"></script>
 </body>
 
+</html>
+</title>
+</head>
+<body>
+
+</body>
 </html>
