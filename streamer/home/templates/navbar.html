@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamer</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <nav class="container-fluid">
+        <ul>
+            <li><a href="{% url 'home:home' %}"><strong>Streamer</strong></a></li>
+        </ul>
+        <ul>
+            <li>
+                <div id="searchDiv">
+                    <input type="text" id="searchBar" placeholder="Search for movies..." onkeypress="checkEnter(event)">
+                    <a id="searchLink">
+                        <img src="{% static 'Search-512.webp' %}" alt="s" style="height:50px; width: 50px">
+                    </a>
+                </div>
+            </li>
+        </ul>
+        <ul>
+            <li><a href="/profile"><button>My Profile</button></a></li>
+        </ul>
+    </nav>
+<script src="{% static 'util.js' %}"></script>
+</body>
+
+</html>

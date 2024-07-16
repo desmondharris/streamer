@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamer</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'searchstyles.css' %}">
+</head>
+<body>
+       {% include 'navbar.html' %}
+    <div id="searchResults">
+        {% for r in results %}
+        <div class="search-result">
+            <a href="/movie/{{ r.id }}">
+                <img src="{{r.poster}}" alt="poster">
+                <h3 class="search-result-label">{{ r.title}} ({{r.year}})</h3>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+<script src="{% static 'util.js' %}"></script>
+</body>
+</html>

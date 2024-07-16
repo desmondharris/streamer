@@ -1,14 +1,3 @@
-    .tab-content {
-        display: none;
-    }
-
-    .tab-content.active {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-        margin-bottom: 1rem;
-    }
 
     .container {
         padding: 2rem;
@@ -36,36 +25,15 @@
         height: 600px;
     }
 
-#searchResultsWidget {
-    position: fixed;
-    background: #000000;
-    border-bottom: 1px solid #000000;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    max-height: 35%;
-    overflow-y: scroll;
-    margin-left: 25%;
-    display: none;
+
+#myList {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  justify-content:center;
+    list-style-type: none;/* or space-between or space-around*/
 }
 
-#searchResultsWidget .result {
-    border: 1px solid #0b365a;
-    padding: 0;
-    margin-bottom: 4px;
-    border-radius: 5px;
-    display: flex;
-    align-items: center;
-}
-
-#searchResultsWidget .result img {
-    max-width: 100px;
-    margin-right: 10px;
-}
-
-#searchResultsWidget .result h3 {
-    margin: 0;
-}
-
-#searchResultsWidget button {
-
+#searchDiv {
+  display: flex;
 }

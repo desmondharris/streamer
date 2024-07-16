@@ -9,9 +9,6 @@ function submitTVShow() {
     const id = document.getElementById('tvId').value;
     const season = document.getElementById('season').value;
     const link = `https://vidsrc.to/embed/tv/${id}/${season}`;
-    console.log(id);
-    console.log(season);
-    console.log(link);
     updateVideo(link);
 }
 
@@ -20,20 +17,23 @@ function submitMovie() {
     const link = `https://vidsrc.to/embed/movie/${id}`;
     updateVideo(link);
 }
-function checkEnter(event, searchId) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        const query = document.getElementById(searchId).value;
-        if (query) {
-            search(query, searchId);
-        }
-    }
+function checkEnter(event) {
+    const query = document.getElementById("searchBar").value;
+    const link = document.getElementById("searchLink");
+    link.href = `/search/${query}`;
+    // if (event.key === 'Enter') {
+    //     event.preventDefault();
+    //     if (query) {
+    //         search(query);
+    //     }
+    // }
 }
 
 function search(query, searchId) {
     console.log("searching");
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', `search/?q=${query}&type=${searchId}`, true);
+    xhr.open('GET', `../search/?q=${query}&type=${searchId}`, true);
+    
     console.log(xhr.responseText);
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
@@ -49,27 +49,28 @@ function displayResults(results) {
     console.log("dr");
     const resultsContainer = document.getElementById('searchResults');
     resultsContainer.innerHTML = ''; // Clear previous results
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'Close';
+    closeButton.onclick = closeSearchResults;
+    resultsContainer.appendChild(closeButton);
     results.forEach(result => {
         const resultElement = document.createElement('div');
         resultElement.className = 'result';
-        if(result.media_type === "Movie"){
-            link = `https://vidsrc.to/embed/movie/${result.id}`;
+        if(result.media_type === "movie"){
+            link = `/movie/${result.id}`;
         }
         else{
-            link = `https://vidsrc.to/embed/tv/${result.id}/${document.getElementById('season').value}`;
+            link = `/tv/${result.id}`;
         }
         resultElement.innerHTML = `
-            <a href="#" onclick="updateVideo('${link}')">
+            <a href="${link}">
                 <img src="${result.poster}" alt="${result.title} poster">
                 <h3>${result.title} (${result.year})</h3>
             </a>
         `;
         resultsContainer.appendChild(resultElement);
     });
-    const closeButton = document.createElement('button');
-    closeButton.textContent = 'Close';
-    closeButton.onclick = closeSearchResults;
-    resultsContainer.appendChild(closeButton);
+
     document.getElementById('searchResultsWidget').style.display = 'block';
 }
 
@@ -86,6 +87,76 @@ function handleClickOutside(event) {
     if (!widget.contains(event.target)) {
         widget.style.display = 'none';
     }
+    console.log(event.target);
+}
+function loadAccountPage()
+{
+
+}
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+function addToList(event){
+    let player = document.getElementById("videoPlayer");
+    const url = player.src;
+    const parts = url.split('/');
+    let id, season;
+    let params = {}
+    if(player.src.includes("movie")){
+         id = parts.pop();
+            params.media_type = "movie";
+
+    } else if(player.src.includes("tv")){
+        console.log("tv");
+         season = parts.pop();
+         id = parts.pop();
+         params.season = season;
+         params.media_type = "tv";
+    }
+    params.id = id;
+    console.log(id);
+    const resp = fetch('add_to_list', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': getCookie("csrftoken") // Include CSRF token in the header
+        },
+        body: new URLSearchParams(params)
+    });
+    if(!resp.ok) {
+        console.error(`Response status ${resp.status} in  addToList POST request`)
+    }
 }
 
-document.addEventListener('click', handleClickOutside);
+function playFromList(event, media_type, id, season){
+    let link;
+    if(media_type === "movie"){
+        link = `https://vidsrc.to/embed/movie/${id}`;
+    }
+    else{
+        link = `https://vidsrc.to/embed/tv/${id}/${season}`;
+    }
+    const resp = fetch('/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': getCookie("csrftoken") // Include CSRF token in the header
+        },
+        body: new URLSearchParams({id: id, media_type: media_type, season: season})
+    });
+    updateVideo(link);
+}
+
+

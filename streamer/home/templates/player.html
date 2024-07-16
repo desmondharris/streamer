@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamer</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div id="searchResultsWidget" class="search-results-widget">
+        <div id="searchResults"></div> <!-- Container for search results -->
+    </div>
+
+    <main class="container">
+        <div class="grid">
+            <section style="margin-bottom: 0">
+                <div>
+                        <iframe id="videoPlayer" src="https://vidsrc.to/embed/{{ media_type }}/{{ imdb_id }}/" allowfullscreen></iframe>
+                </div>
+
+
+                <!-- Add this div for search results -->
+            </section>
+
+        </div>
+        <button id="myListButton" onclick="addToList()">Add to my list</button>
+    </main>
+
+    <footer class="container">
+        <small><a href="#">Privacy Policy</a> • <a href="#">Terms of Service</a></small>
+    </footer>
+<script src="{% static 'util.js' %}"></script>
+</body>
+
+</html>
+</title>
+</head>
+<body>
+
+</body>
+</html>
