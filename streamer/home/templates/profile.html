@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streamer</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'profilestyles.css' %}">
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <ul id="myList">
+        {% for movie in movies %}
+            <li>
+                <div class="result">
+                    <img src="{{movie.poster}}">
+                    <a href="/{{movie.imdb_id}}"> <h3>{{ movie.title }} ({{ movie.year }})</h3> </a>
+                </div>
+            </li>
+        {% endfor %}
+        {% for tvshow in tvshows %}
+        <li>
+            <div class="result">
+                <img src="{{tvshow.poster}}">
+                <a href="/{{tvshow.imdb_id}}/{{tvshow.season}}"> <h3>{{ tvshow.title }} ({{ tvshow.year }})</h3> </a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+<script src="{% static 'util.js' %}"></script>
+</body>
+</html>
