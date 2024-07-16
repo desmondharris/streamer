@@ -1,0 +1,9 @@
+#searchResults {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.search-result-label{
+    text-overflow: ellipsis;
+    max-width: 185px;
+}

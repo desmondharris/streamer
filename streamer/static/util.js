@@ -17,14 +17,16 @@ function submitMovie() {
     const link = `https://vidsrc.to/embed/movie/${id}`;
     updateVideo(link);
 }
-function checkEnter(event, searchId) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        const query = document.getElementById(searchId).value;
-        if (query) {
-            search(query, searchId);
-        }
-    }
+function checkEnter(event) {
+    const query = document.getElementById("searchBar").value;
+    const link = document.getElementById("searchLink");
+    link.href = `/search/${query}`;
+    // if (event.key === 'Enter') {
+    //     event.preventDefault();
+    //     if (query) {
+    //         search(query);
+    //     }
+    // }
 }
 
 function search(query, searchId) {
@@ -47,27 +49,28 @@ function displayResults(results) {
     console.log("dr");
     const resultsContainer = document.getElementById('searchResults');
     resultsContainer.innerHTML = ''; // Clear previous results
+    const closeButton = document.createElement('button');
+    closeButton.textContent = 'Close';
+    closeButton.onclick = closeSearchResults;
+    resultsContainer.appendChild(closeButton);
     results.forEach(result => {
         const resultElement = document.createElement('div');
         resultElement.className = 'result';
         if(result.media_type === "movie"){
-            link = `https://vidsrc.to/embed/movie/${result.id}`;
+            link = `/movie/${result.id}`;
         }
         else{
-            link = `https://vidsrc.to/embed/tv/${result.id}/${document.getElementById('season').value}`;
+            link = `/tv/${result.id}`;
         }
         resultElement.innerHTML = `
-            <a href="#" onclick="updateVideo('${link}')">
+            <a href="${link}">
                 <img src="${result.poster}" alt="${result.title} poster">
                 <h3>${result.title} (${result.year})</h3>
             </a>
         `;
         resultsContainer.appendChild(resultElement);
     });
-    const closeButton = document.createElement('button');
-    closeButton.textContent = 'Close';
-    closeButton.onclick = closeSearchResults;
-    resultsContainer.appendChild(closeButton);
+
     document.getElementById('searchResultsWidget').style.display = 'block';
 }
 
@@ -157,4 +160,3 @@ function playFromList(event, media_type, id, season){
 }
 
 
-document.addEventListener('click', handleClickOutside);

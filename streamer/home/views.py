@@ -10,68 +10,55 @@ tmdb.API_KEY = '16d0db51d9356bcbecc06f57c1c0e593'
 
 @login_required
 def home(request):
-    if request.GET.get("media_type"):
-        media_type = request.GET.get("media_type")
-        imdb_id = request.GET.get("id")
-        if request.get("season"):
-            season = request.GET.get("season")
-    else:
-        media_type = "default"
-        imdb_id = -1
-        season = -1
-    return render(request, 'home.html', {'media_type': media_type, 'imdb_id': imdb_id, season: season})
+    return render(request, 'home.html')
 
 
 def movie_player(request, imdb_id):
+    print(f"loading movie {imdb_id}")
     return render(request, 'player.html', {'media_type': "movie", 'imdb_id': imdb_id})
 
 
-def tv_player(request, imdb_id, season):
-    return render(request, 'player.html', {'media_type': "tv", 'imdb_id': imdb_id, 'season': season})
+def tv_player(request, imdb_id):
+    print(f"loading tv show {imdb_id}")
+    return render(request, 'player.html', {'media_type': "tv", 'imdb_id': imdb_id})
 
 
-def search(request):
+def search(request, search_query):
+    import random
     print("search view")
-    db = IMDB()
     searcher = tmdb.Search()
     conf = tmdb.Configuration().info()
-    query = request.GET.get('q', '')
-    search_type = request.GET.get('type', '')
+    query = search_query
     output = []
-    if search_type == 'movieSearch':
-        searcher.movie(query=query)
-        media_type = 'movie'
-        for s in searcher.results:
-            result = {}
-            result['title'] = s['title']
-            result['id'] = s['id']
-            result['year'] = s['release_date'].split('-')[0]
-            result["poster"] = f"{conf['images']['base_url']}w185{s['poster_path']}"
-            result["media_type"] = media_type
-            output.append(result)
-    elif search_type == 'tvSearch':
-        result = {}
-        searcher.tv(query=query)
-        media_type = 'tv'
-        for s in searcher.results:
-            result = {}
-            result['title'] = s['name']
-            result['id'] = s['id']
-            result['year'] = s['first_air_date'].split('-')[0]
-            result["poster"] = f"{conf['images']['base_url']}w185{s['poster_path']}"
-            result["media_type"] = media_type
-            output.append(result)
-            print(result)
 
+    searcher.movie(query=query)
+    media_type = 'movie'
+    for s in searcher.results:
+        result = {}
+        result['title'] = s['title']
+        result['id'] = s['id']
+        result['year'] = s['release_date'].split('-')[0]
+        result["poster"] = f"{conf['images']['base_url']}w185{s['poster_path']}"
+        result["media_type"] = media_type
+        result["popularity"] = s['popularity']
+        output.append(result)
+
+    searcher.tv(query=query)
+    media_type = 'tv'
+    for s in searcher.results:
+        result = {}
+        result['title'] = s['name']
+        result['id'] = s['id']
+        result['year'] = s['first_air_date'].split('-')[0]
+        result["poster"] = f"{conf['images']['base_url']}w185{s['poster_path']}"
+        result["media_type"] = media_type
+        result["popularity"] = s['popularity']
+        output.append(result)
+
+    output = sorted(output, key=lambda x: x['popularity'], reverse=True)
     print(output)
-    return JsonResponse({"results": output})
-    # print(len(results))
-    # for result in results:
-    #     # print all the results
-    #     if search_type == 'movieSearch':
-    #         print(f"title: {result['title']}, year: {result['year']}, id: {result['id']}, leads: {result['leads']}, type: {result['media_type']}\nposter: {result['poster']}\n")
-    #     print(f"title: {result['title']}, year: {result['year']}, id: {result['id']}, leads: {result['leads']}, type: {result['media_type']}\nposter: {result['poster']}\n")
-    # return JsonResponse({"results": results})
+    return render(request, 'search.html', {'results': output})
+    # return JsonResponse({"results": output})
 
 
 def login_view(request):
